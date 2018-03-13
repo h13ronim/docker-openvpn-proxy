@@ -1,24 +1,23 @@
-version: '2'
+version: '3'
 services:
   openvpn-client:
     build: .
     container_name: openvpn-proxy
-    image: dceschmidt/openvpn-proxy
+    image: h13ronim/openvpn-proxy
     privileged: true
     restart: always
     ports:
       - "1022:22"
       - "3128:3128"
     dns:
-      - 8.8.8.8
-      - 8.8.4.4
+      - "${DNS_SERVER_1:-8.8.8.8}"
+      - "${DNS_SERVER_2:-8.8.4.4}"
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - ./tmp/config:/config
     environment:
-      OPENVPN_PROVIDER: PUREVPN
-      OPENVPN_USERNAME: username
-      OPENVPN_PASSWORD: password
+      OPENVPN_PROVIDER: "${OPENVPN_PROVIDER}"
+      OPENVPN_USERNAME: "${OPENVPN_USERNAME}"
+      OPENVPN_PASSWORD: "${OPENVPN_PASSWORD}"
       OPENVPN_OPTS: "--inactive 3600 --ping 10 --ping-exit 60"
-      OPENVPN_CONFIG: VENEZUELA-UDP
+      OPENVPN_CONFIG: "${OPENVPN_CONFIG}"
       LOCAL_NETWORK: 10.0.0.0/24
